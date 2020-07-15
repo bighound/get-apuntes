@@ -12,4 +12,4 @@ pass   | Contraseña del usuario
 
 ## Ejemplo
 
-./getApuntes.py --username nombre@um.es --password password
+./getApuntes.py --user nombre@um.es --pass password
