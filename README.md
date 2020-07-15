@@ -9,3 +9,7 @@ Parámetros | Descripción
 --- | --- 
 username   | Nombre del usuario (correo de la universidad) 
 password   | Contraseña del usuario
+
+## Ejemplo
+
+./getApuntes.py --username nombre@um.es --password password
