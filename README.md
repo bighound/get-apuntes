@@ -7,8 +7,8 @@ Descarga los apuntes de tu curso con un sólo comando. Sólo funciona para miemb
 #### Parámetros del script
 Parámetros | Descripción
 --- | --- 
-username   | Nombre del usuario (correo de la universidad) 
-password   | Contraseña del usuario
+user   | Nombre del usuario (correo de la universidad) 
+pass   | Contraseña del usuario
 
 ## Ejemplo
 
