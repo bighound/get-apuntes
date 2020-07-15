@@ -1,6 +1,6 @@
 # getApuntes.py
 -----
-Descarga los apuntes de tu curso con un sólo comando. (Universidad de Murcia)
+Descarga los apuntes de tu curso con un sólo comando. Sólo funciona para miembros de la Universidad de Murcia
 
 ## Funcionamiento
 
