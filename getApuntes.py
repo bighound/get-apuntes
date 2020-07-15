@@ -8,13 +8,13 @@ import requests
 import re
 import string
 import argparse
-import os
+import threading
+import subprocess
 import sys
 from bs4 import BeautifulSoup
 
-def download(asignaturas, user, pwd):
-    for a in asignaturas:
-        os.system('wget -r https://aulavirtual.um.es/dav/{0} --user={1} --password={2} 2>/dev/null'.format(a, user, pwd))
+def concurrentDownload(i, asignaturas, user, pwd):
+    subprocess.run(["wget", "-r", "https://aulavirtual.um.es/dav/{0}".format(asignaturas[i]), "--user={0}".format(user),"--password={0}".format(pwd),"2>&2"])
 
 def login(user, pwd):
     s       = requests.Session()
@@ -23,6 +23,10 @@ def login(user, pwd):
     payload = {'username':user, 'password':pwd, '_eventId':'submit'}
     
     req   = s.post(url, headers=headers, data=payload)
+    if req.status_code !=200:
+        print("[!] El login es incorrecto, prueba con otras credenciales.")
+        sys.exit(1)
+
     soup  = BeautifulSoup(req.text,'html.parser')
     value = soup.find('input', {'name': 'execution'}).get('value')
 
@@ -36,7 +40,11 @@ def login(user, pwd):
         enlace = asign.get('href').split('/')
         asignaturas.append(enlace[len(enlace) - 1])
     
-    download(asignaturas, user, pwd)
+    threads = list()
+    for i in range(len(asignaturas)):
+        t = threading.Thread(target=concurrentDownload, args=(i, asignaturas, user, pwd))
+        threads.append(t)
+        t.start()
 
 def main():
     parser = argparse.ArgumentParser(description='Descarga todos tus apuntes del curso con un sólo click.')
@@ -48,12 +56,21 @@ def main():
    
     args = parser.parse_args()
 
-    if (args.user and args.pwd is None) or (args.pwd and args.user is None):
+    if (args.user is None or args.pwd is None):
         print("[!] Debes de introducir tanto el usuario como tu contraseña")
+        sys.exit(1)
+
+    if (args.user == ""):
+        print("[!] El usuario no puede estar vacío.")
         sys.exit(1)
 
     user = args.user
     pwd  = args.pwd
+
+    x = re.search("[a-zA-Z]+[0-9]*@um.es", user)
+    if (x is None):
+        print("[!] El correo es incorrecto. Ej: example@um.es")
+        sys.exit(1)
 
     login(user, pwd)
 
