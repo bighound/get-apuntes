@@ -1,4 +1,4 @@
-# Get Apuntes
+# getApuntes.py
 -----
 Descarga los apuntes de tu curso con un sólo comando. (Universidad de Murcia)
 
